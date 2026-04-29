@@ -1,6 +1,12 @@
 # git-for-windows/setup-git-for-windows-sdk
 
-Hardened GitHub Action by [Chainguard](https://www.chainguard.dev).
+Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at [https://github.com/git-for-windows/setup-git-for-windows-sdk](https://github.com/git-for-windows/setup-git-for-windows-sdk).
+
+## Versions
+
+| Version | Tag | Upstream commit |
+|---------|-----|-----------------|
+| v1.11.0 | [`v1.11.0`](https://github.com/chainguard-actions/setup-git-for-windows-sdk/tree/v1.11.0) | — |
 
 ## Privacy
 
