@@ -1,6 +1,6 @@
 # git-for-windows/setup-git-for-windows-sdk
 
-A GitHub Action to initialize various flavors of the Git for Windows SDK
+Set up an environment to develop Git for Windows
 
 Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at [https://github.com/git-for-windows/setup-git-for-windows-sdk](https://github.com/git-for-windows/setup-git-for-windows-sdk).
 
@@ -9,6 +9,7 @@ Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at
 | Version | Tag | Upstream commit |
 |---------|-----|-----------------|
 | v1.11.0 | [`v1.11.0`](https://github.com/chainguard-actions/git-for-windows-setup-git-for-windows-sdk/tree/v1.11.0) | — |
+| v2.0.0 | [`v2.0.0`](https://github.com/chainguard-actions/git-for-windows-setup-git-for-windows-sdk/tree/v2.0.0) | [`c1b1ce1`](https://github.com/git-for-windows/setup-git-for-windows-sdk/commit/c1b1ce1ffdb08f2b956fbbf144beca432f0a4a84) |
 
 ## Privacy
 
