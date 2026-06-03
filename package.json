@@ -1,0 +1,58 @@
+{
+  "name": "setup-git-for-windows-sdk",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Set up an environment to develop Git for Windows TypeScript template action",
+  "main": "lib/main.js",
+  "scripts": {
+    "build": "tsc",
+    "format": "prettier --write **/*.ts",
+    "format-check": "prettier --check **/*.ts",
+    "lint": "eslint **/*.ts",
+    "package": "ncc build --source-map",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit -p tsconfig.eslint.json",
+    "all": "npm run build && npm run format && npm run lint && npm run typecheck && npm run package && npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/git-for-windows/setup-git-for-windows-sdk.git"
+  },
+  "keywords": [
+    "actions",
+    "node",
+    "setup",
+    "git",
+    "git-for-windows"
+  ],
+  "type": "module",
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@actions/cache": "^6.0.0",
+    "@actions/core": "^3.0.0",
+    "@octokit/rest": "^22.0.1",
+    "unzipper": "^0.12.3"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.5",
+    "@eslint/js": "^9.39.4",
+    "@stylistic/eslint-plugin": "^5.10.0",
+    "@types/node": "^25.5.0",
+    "@types/unzipper": "^0.10.11",
+    "@typescript-eslint/eslint-plugin": "^8.57.0",
+    "@typescript-eslint/parser": "^8.57.0",
+    "@vercel/ncc": "^0.38.4",
+    "eslint": "^9.39.4",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-anti-trojan-source": "^1.1.2",
+    "eslint-plugin-github": "^6.0.0",
+    "eslint-plugin-prettier": "^5.5.5",
+    "globals": "^17.4.0",
+    "js-yaml": "^4.1.1",
+    "prettier": "3.8.1",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.57.0",
+    "vitest": "^4.1.0"
+  }
+}
