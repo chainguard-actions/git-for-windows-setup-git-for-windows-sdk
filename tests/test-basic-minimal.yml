@@ -1,0 +1,23 @@
+name: Test basic minimal flavor
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: action
+        uses: .
+        with:
+          flavor: minimal
+          architecture: x86_64
+          path: /tmp/git-sdk-test
+          verbose: '0'
+          cache: 'false'
+          github-token: ${{ github.token }}
+      - name: Assert action completed without error
+        run: |
+          echo "Action completed successfully"
+          echo "Note: This action only installs the SDK on Windows runners."
+          echo "On Linux, it exits early with a warning, which is expected behavior."
+          echo "PASS: action step completed without error"

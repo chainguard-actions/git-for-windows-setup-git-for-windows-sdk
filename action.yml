@@ -1,0 +1,58 @@
+name: 'Setup Git for Windows SDK'
+description: 'Set up an environment to develop Git for Windows'
+author: 'Johannes Schindelin'
+branding:
+  icon: fast-forward
+  color: blue
+inputs:
+  flavor:
+    required: false
+    description: 'The subset (if any) of the SDK: minimal, makepkg-git, build-installers, or full'
+    default: 'minimal'
+  architecture:
+    required: false
+    description: >
+      The architecture of the SDK: x86_64, i686, aarch64, or ucrt64.
+      Note that "aarch64" only supports the "full" flavor for now.
+      "ucrt64" selects the UCRT64 variant of git-sdk-64; while the
+      MINGW64-to-UCRT64 migration is in progress it is cloned from a
+      transitional "ucrt64" branch that will eventually replace "main",
+      at which point "x86_64" itself will materialise a UCRT64 SDK.
+    default: 'x86_64'
+  msys:
+    required: false
+    description: 'Whether to start in MSYS mode (defaults to false)'
+    default: 'false'
+  path:
+    required: false
+    description: 'Where to write the SDK files'
+    default: ''
+  cleanup:
+    required: false
+    description: 'Whether to clean up SDK files. This is only needed on self-hosted runners that are reused for multiple jobs.'
+    default: 'false'
+  verbose:
+    required: false
+    description: 'Whether to log files as they are extracted'
+    default: '250'
+  cache:
+    required: false
+    description: >
+      Use @actions/cache to accelerate this Action.
+      Note: GitHub Actions caches are shared across branches and
+      workflows within a repository, which makes them susceptible
+      to cache-poisoning attacks (see e.g. Cacheract,
+      https://github.com/AdnaneKhan/Cacheract). Caching is
+      therefore disabled by default.
+    default: 'false'
+  github-token:
+    description: >
+      Personal access token (PAT) used to call into GitHub's REST API.
+      We recommend using a service account with the least permissions necessary.
+      Also when generating a new PAT, select the least scopes necessary.
+      [Learn more about creating and using encrypted secrets](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets)
+    default: ${{ github.token }}
+runs:
+  using: 'node24'
+  main: 'dist/index.js'
+  post: 'dist/index.js'
