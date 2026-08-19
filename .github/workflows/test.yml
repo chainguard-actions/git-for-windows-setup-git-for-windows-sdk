@@ -1,0 +1,98 @@
+name: 'build-test'
+on: # rebuild any PRs and main branch changes
+  pull_request:
+  push:
+    tags:
+      - 'v[0-9]*'
+    branches:
+      - main
+      - 'v[0-9]*'
+
+permissions:
+  contents: read
+
+jobs:
+  build: # make sure build/ci work properly
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 24
+      - run: npm ci
+      - run: npm run build
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run format && git diff-files
+      - run: npm run test
+      - run: npm run package
+      - name: Verify that `dist/index.js` is up to date
+        shell: bash
+        run: |
+          # `ncc` produces output with mixed line endings
+          test -z "$(git diff -aw HEAD -- ':(exclude)dist/index.js.map' | tee diff.txt)" || {
+            echo 'Files changed after `npm run package`'
+            cat diff.txt
+            exit 1
+          }
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        if: failure()
+        with:
+          name: diff.txt
+          path: diff.txt
+  test: # make sure the action works on a clean machine without building
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - architecture: x86_64
+            flavor: minimal
+            mingw_prefix: /mingw64
+          - architecture: ucrt64
+            flavor: minimal
+            mingw_prefix: /ucrt64
+          - architecture: ucrt64
+            flavor: makepkg-git
+            mingw_prefix: /ucrt64
+          - architecture: ucrt64
+            flavor: build-installers
+            mingw_prefix: /ucrt64
+          - architecture: ucrt64
+            flavor: full
+            mingw_prefix: /ucrt64
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+      - name: Run this Action in-place
+        uses: ./
+        with:
+          flavor: ${{ matrix.flavor }}
+          architecture: ${{ matrix.architecture }}
+      - name: Verify that the Bash of Git for Windows' SDK is used
+        shell: bash
+        env:
+          MINGW_PREFIX: ${{ matrix.mingw_prefix }}
+        run: |
+          set -ex
+          test ! -e .tmp
+          echo "This is the MSYS2 pseudo root: $(cygpath -aw /)"
+          test "gcc is $MINGW_PREFIX/bin/gcc" = "$(type gcc)"
+          test "prove is /usr/bin/core_perl/prove" = "$(type prove)"
+          prove -V
+          printf '%s\n' \
+            "#include <stdio.h>" \
+            '' \
+            'int main()' \
+            '{' \
+            '  printf("Hello, world!\n");' \
+            '  return 0;' \
+            '}' >hello-world.c
+          gcc -o hello-world.exe hello-world.c
+          hello="$(./hello-world.exe)"
+          test 'Hello, world!' = "$hello"
+
+          # Verify that the locale is set, enabling `grep -P` to work
+          test 123 = "$(printf '1248\n123\n' | grep -P '2(?!4)')"
+
+          # Verify that /dev/fd/<pid> works
+          test hello = "$(cat <(echo hello))"

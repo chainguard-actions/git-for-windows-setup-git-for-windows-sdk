@@ -1,4 +1,4 @@
-name: Test cleanup mode
+name: Test basic usage - minimal flavor x86_64
 on:
   workflow_dispatch:
 jobs:
@@ -13,10 +13,8 @@ jobs:
         with:
           flavor: minimal
           architecture: x86_64
-          cleanup: 'true'
           github-token: ${{ github.token }}
       - name: Assert action completed without error
         run: |
-          echo "Cleanup mode action completed successfully"
-          echo "On Linux the action skips with a warning, which is expected behavior"
-          echo "PASS: cleanup mode action completed"
+          echo "Action completed successfully (on Linux it skips with a warning, which is expected)"
+          echo "PASS: action completed without error"

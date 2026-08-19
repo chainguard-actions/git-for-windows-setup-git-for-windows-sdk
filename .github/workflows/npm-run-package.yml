@@ -1,0 +1,55 @@
+name: 'npm run package'
+# Main use case: repackage when Dependabot updates a dependency
+on:
+  push:
+    branches:
+      - 'dependabot/**'
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Process this branch'
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  npm-run-package-and-push: # make sure build/ci work properly
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || github.event.repository.owner.login == 'git-for-windows'
+    environment: git-for-windows-ci-push
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+        with:
+          repository: ${{ github.event.repository.full_name }}
+          ref: ${{ inputs.branch }}${{ github.event.ref }}
+          token: ${{ secrets.GIT_FOR_WINDOWS_CI_PUSH }}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 24
+      - run: npm ci
+      - run: npm run build
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run format && git diff-files
+      - run: npm run test
+      - run: npm run package
+      - name: check if commit & push is needed
+        id: check
+        run: |
+          git add -u -- dist/ &&
+          git diff-index --cached --exit-code HEAD -- ||
+          echo "need-to-commit=yes" >> "$GITHUB_OUTPUT"
+      - name: commit & push
+        if: steps.check.outputs.need-to-commit == 'yes'
+        env:
+          ACTOR: ${{ github.actor }}
+        run: |
+          git config user.name "$ACTOR" &&
+          git config user.email "$ACTOR@users.noreply.github.com" &&
+          git commit -m 'npm run build && npm run package' -- dist/ &&
+          git update-index --refresh &&
+          git diff-files --exit-code &&
+          git diff-index --cached --exit-code HEAD -- &&
+          git push

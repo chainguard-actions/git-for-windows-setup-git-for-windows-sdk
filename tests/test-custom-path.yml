@@ -1,4 +1,4 @@
-name: Test cleanup mode
+name: Test custom path input
 on:
   workflow_dispatch:
 jobs:
@@ -13,10 +13,10 @@ jobs:
         with:
           flavor: minimal
           architecture: x86_64
-          cleanup: 'true'
+          path: /tmp/git-sdk-test
           github-token: ${{ github.token }}
       - name: Assert action completed without error
         run: |
-          echo "Cleanup mode action completed successfully"
-          echo "On Linux the action skips with a warning, which is expected behavior"
-          echo "PASS: cleanup mode action completed"
+          echo "Custom path action completed successfully"
+          echo "On Linux the action skips with a warning (Windows-only action), which is expected"
+          echo "PASS: custom path action completed without error"
