@@ -4,8 +4,13 @@
   "version": "v2.2.0",
   "commit_sha": "a154edd76d343f1d6f19d8d2e9236e3ff2073a70",
   "url": "https://github.com/git-for-windows/setup-git-for-windows-sdk",
-  "policy_sha": "d636be7e43ef829af6e853da6b3c7566db9f72fe",
+  "policy_sha": "374911c4be584df24e6da57af2d990570ef0f859",
   "test_policy_sha": "843adf9e4b8f85d0c08b27b9d0b09dd094b54702",
   "test_agent_version": "2",
-  "harden_agent_version": "2"
+  "harden_agent_version": "2",
+  "dist_artifact": {
+    "gcs_uri": "gs://patch-actions-node-artifacts/dist-artifacts/git-for-windows/setup-git-for-windows-sdk/v2.2.0/sha256-63a35f9b038a4ab406cd86b42db336b1973a0581deb28683283f49a3d4b61e82.tar.gz",
+    "sha256": "63a35f9b038a4ab406cd86b42db336b1973a0581deb28683283f49a3d4b61e82",
+    "size_bytes": 1393743
+  }
 }
